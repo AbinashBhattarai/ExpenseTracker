@@ -1,8 +1,8 @@
-using BlogSite.Models;
 using Microsoft.AspNetCore.Mvc;
+using RecipeBook.Models;
 using System.Diagnostics;
 
-namespace BlogSite.Controllers
+namespace RecipeBook.Controllers
 {
     public class HomeController : Controller
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlogSite", "BlogSite\BlogSite.csproj", "{4181B0E4-88B6-43D5-87A7-F5D4C544F8A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook", "RecipeBook\RecipeBook.csproj", "{6B7398A1-822E-4E6C-9F7D-C50677AC4926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4181B0E4-88B6-43D5-87A7-F5D4C544F8A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4181B0E4-88B6-43D5-87A7-F5D4C544F8A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4181B0E4-88B6-43D5-87A7-F5D4C544F8A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4181B0E4-88B6-43D5-87A7-F5D4C544F8A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B7398A1-822E-4E6C-9F7D-C50677AC4926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B7398A1-822E-4E6C-9F7D-C50677AC4926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B7398A1-822E-4E6C-9F7D-C50677AC4926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B7398A1-822E-4E6C-9F7D-C50677AC4926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4915C16C-4124-420D-86E0-438C11325892}
+		SolutionGuid = {02A6BC45-F004-4C5E-9C51-97556FFBF1CE}
 	EndGlobalSection
 EndGlobal
