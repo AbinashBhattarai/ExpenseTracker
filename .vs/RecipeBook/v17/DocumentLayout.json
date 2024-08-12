@@ -1,12 +1,37 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Work\\Project\\Asp.Net Core\\RecipeBook\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6B7398A1-822E-4E6C-9F7D-C50677AC4926}|RecipeBook\\RecipeBook.csproj|c:\\work\\project\\asp.net core\\recipebook\\recipebook\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{6B7398A1-822E-4E6C-9F7D-C50677AC4926}|RecipeBook\\RecipeBook.csproj|solutionrelative:recipebook\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Work\\Project\\Asp.Net Core\\RecipeBook\\RecipeBook\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "RecipeBook\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Work\\Project\\Asp.Net Core\\RecipeBook\\RecipeBook\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "RecipeBook\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAAAoAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-12T14:45:50.554Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
