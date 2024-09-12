@@ -11,26 +11,22 @@ namespace ExpenseTracker.ViewModel
     public class CreateTransactionViewModel
     {
         [DisplayName("Transaction Date")]
-        [Required(ErrorMessage = "Transaction date is required")]
-        public DateTime Date { get; set; }
+        [Required(ErrorMessage = "Date is required")]
+        public DateTime Date { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "Type can't be empty")]
+        [Required(ErrorMessage = "Type is required")]
         public TransactionType Type { get; set; }
 
         [MaxLength(50, ErrorMessage = "Note too long, can't exceed 50 characters")]
         public string? Note { get; set; }
 
-        [Required(ErrorMessage = "Amount is required")]
-        [Range(0, Double.MaxValue, ErrorMessage = "Quantity must be between 0 and 10")]
-        public decimal Amount { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Amount should be greater than 0.")]
+        public int Amount { get; set; }
 
         [DisplayName("Category")]
-        [Required(ErrorMessage = "Category is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Please select a category.")]
         public int CategoryId { get; set; }
-        public List<Category>? Categories { get; set; }
-
-        [ValidateNever]
-        public DateTime MaxDate { get { return DateTime.Now; } }
+        public IEnumerable<SelectListItem>? Categories { get; set; }
     }
 
 

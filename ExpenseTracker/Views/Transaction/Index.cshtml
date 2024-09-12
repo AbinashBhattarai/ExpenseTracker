@@ -1,41 +1,28 @@
 ﻿@model IEnumerable<Transaction>
 
-<div class="pt-3 overflow-auto">
-    <div class="d-sm-flex flex-wrap justify-content-between align-items-center mb-3">
+<div class="pt-3 overflow-auto container">
+    <div class="d-sm-flex justify-content-between align-items-center mb-3">
         <div>
-            <h4 class="fw-bold">Transactions</h4>
+            <h4>Transaction</h4>
             <p class="text-black-50">
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-                    </svg>
-                </span>
+                <i class="bi bi-house-fill"></i>
+                <i class="bi bi-chevron-right"></i>
                 <a asp-controller="Transaction" asp-action="Index" class="text-black-50">Transaction</a>
             </p>
         </div>
-        <div class="text-center mb-5 mb-md-0">
-            <a asp-controller="Transaction" asp-action="Create" class="link-primary fw-bold text-decoration-none border px-2 pb-1 rounded">
-                <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                    </svg>
-                </span>
-                Add Transaction
-            </a>
+        <div class="text-center border rounded d-flex justify-content-center align-items-center px-4 gap-2">
+            <i class="bi bi-plus text-primary fw-bold" style="font-size:1.5rem;"></i>
+            <a asp-action="Create" asp-controller="Transaction" class="text-decoration-none">Add Transaction</a>
         </div>
     </div>
     @if (Model.Count() > 0)
     {
-        <div class="rounded-3 overflow-hidden rounded" style="min-width:38rem;background-color:aliceblue;">
+        <div class="rounded-3 overflow-hidden rounded" style="min-width:45rem;background-color:aliceblue;">
             <table id="transaction" class="table table-borderless text-center border-bottom mb-0">
                 <thead class="table-primary">
                     <tr>
                         <th>Category</th>
                         <th>Date</th>
-                        <th>Note</th>
                         <th>Type</th>
                         <th>Amount</th>
                         <th>Actions</th>
@@ -45,22 +32,29 @@
                     @foreach (var transaction in Model)
                     {
                         <tr>
-                            <td class="text-capitalize">@transaction.Category.Name</td>
-                            <td>@transaction.Date.ToLongDateString()</td>
-                            <td class="text-capitalize">@transaction.Note</td>
-                            <td><span class="rounded px-1 pb-1 text-white">@transaction.Type</span></td>
+                            <td>@transaction.Category!.Name</td>
+                            <td>@transaction.Date.ToShortDateString()</td>
+                            <td><span class="rounded px-1 pb-1">@transaction.Type</span></td>
                             <td>@transaction.Amount</td>
                             <td>
-                                <a asp-controller="Transaction" asp-action="View" asp-route-id="@transaction.Id" class="btn btn-success btn-sm" style="width:75px;">
+                                <a asp-controller="Transaction" asp-action="View" asp-route-id="@transaction.Id" class="btn btn-secondary btn-sm" style="width:5rem;">
+                                    <i class="bi bi-eye"></i>
                                     View
                                 </a>
-                                <a asp-controller="Transaction" asp-action="Create" asp-route-id="@transaction.Id" class="btn btn-danger btn-sm" style="width:75px;">Delete</a>
+                                <a asp-controller="Transaction" asp-action="Edit" asp-route-id="@transaction.Id" class="btn btn-success btn-sm" style="width:5rem;">
+                                    <i class="bi bi-pencil-square"></i>
+                                    Edit
+                                </a>
+                                <a class="btn btn-danger btn-sm" style="width:5.2rem;" onclick="displayAlert('/Transaction/Delete/@transaction.Id', '')">
+                                    <i class="bi bi-trash"></i>
+                                    Delete
+                                </a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <div class="d-flex flex-wrap justify-content-center gap-3 justify-content-md-between ps-3 pe-5 pt-2 align-items-baseline">
+            <div class="d-flex flex-wrap justify-content-start gap-3 justify-content-md-between ps-3 pe-5 pt-2 align-items-baseline">
                 <ul class="pagination mb-0">
                     <li class="page-item">
                         <a class="page-link py-1" href="#" style="background-color:aliceblue;">
@@ -83,21 +77,3 @@
         <p class="text-center text-danger fw-bold fs-5">You have not added any transactions yet!!!</p>
     }
 </div>
-
-
-@section Scripts{
-    <script>
-        $(function () {
-            $('#transaction tbody tr td:nth-child(4)').each(function () {
-                var data = $(this).text();
-                console.log(data);
-                if (data == 'Income' || 'income') {
-                    $(this).find('span').addClass('income');
-                }
-                else {
-                    $(this).find('span').addClass('expense');
-                }
-            });
-        });
-    </script>
-}

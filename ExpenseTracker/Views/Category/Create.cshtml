@@ -1,7 +1,8 @@
 ﻿@model CreateCategoryViewModel
 
+
 <div class="pt-3">
-    <h4 class="fw-bold">Add New Category</h4>
+    <h4>Add New Category</h4>
     <p class="text-black-50">
         <i class="bi bi-house-fill"></i>
         <i class="bi bi-chevron-right"></i>
@@ -17,7 +18,7 @@
         <form method="post" asp-controller="Category" asp-action="Create" class="py-3 px-5 rounded shadow" style="background-color:aliceblue;width:30rem;">
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
-                <input type="text" class="form-control text-capitalize" asp-for="Name">
+                <input type="text" class="form-control" asp-for="Name">
                 <span asp-validation-for="Name" class="text-danger fw-normal"></span>
             </div>
             <div class="pt-3">

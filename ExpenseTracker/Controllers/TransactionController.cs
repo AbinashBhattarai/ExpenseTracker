@@ -3,8 +3,7 @@ using ExpenseTracker.ViewModel;
 using ExpenseTracker.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ExpenseTracker.Enum;
-using Microsoft.Identity.Client;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ExpenseTracker.Controllers
 {
@@ -30,10 +29,10 @@ namespace ExpenseTracker.Controllers
         {
             CreateTransactionViewModel createTransactionVM = new()
             {
-                Categories = await _context.Category
-                                    .AsNoTracking()
-                                    .ToListAsync()
+                Categories = await GetCategorySelectList()
+
             };
+
             return View(createTransactionVM);
         }
 
@@ -42,6 +41,7 @@ namespace ExpenseTracker.Controllers
         {
             if (!ModelState.IsValid)
             {
+                createTransactionVM.Categories = await GetCategorySelectList();
                 return View(createTransactionVM);
             }
 
@@ -59,12 +59,15 @@ namespace ExpenseTracker.Controllers
             return RedirectToAction("Index");
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> View(int id)
-        //{
-        //    var transaction = await GetTransactionById(id);
-        //    return View(transaction);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> View(int id)
+        {
+            var transaction = await _context.Transaction
+                                            .Include(t => t.Category)
+                                            .AsNoTracking()
+                                            .FirstOrDefaultAsync(t => t.Id == id);
+            return View(transaction);
+        }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -75,8 +78,9 @@ namespace ExpenseTracker.Controllers
             }
 
             var transaction = await _context.Transaction
+                                                .Include(t => t.Category)       
                                                 .AsNoTracking()
-                                                .FirstOrDefaultAsync(x => x.Id == id);
+                                                .FirstOrDefaultAsync(t => t.Id == id);
             if (transaction == null)
             {
                 return NotFound();
@@ -90,13 +94,20 @@ namespace ExpenseTracker.Controllers
                 Note = transaction.Note,
                 Amount = transaction.Amount,
                 CategoryId = transaction.CategoryId,
+                Categories = await GetCategorySelectList()
             };
-            return View(transaction);
+            return View(editTransactionVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditTransactionViewModel editTransactionVM)
         {
+            if (!ModelState.IsValid)
+            {
+                editTransactionVM.Categories = await GetCategorySelectList();
+                return View(editTransactionVM);
+            }
+
             var transaction = await _context.Transaction.FindAsync(editTransactionVM.Id);
 
             if(transaction == null)
@@ -115,20 +126,29 @@ namespace ExpenseTracker.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
             var transaction = await _context.Transaction.FindAsync(id);
-
-            if(transaction == null)
+            if (transaction == null)
             {
-                return NotFound();
+                return Json(new { success = false, message = "Transaction not found" });
             }
-
             _context.Transaction.Remove(transaction);
             await _context.SaveChangesAsync();
-            TempData["success"] = "Transaction removed successfully";
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "Transaction deleted successfully" });
+        }
+
+
+        public async Task<IEnumerable<SelectListItem>> GetCategorySelectList()
+        {
+            var categories = await _context.Category.AsNoTracking().ToListAsync();
+            var categorySelectList = categories.Select(cat => new SelectListItem
+            {
+                Value = cat.Id.ToString(),
+                Text = cat.Name,
+            });
+            return categorySelectList;
         }
     }
 }

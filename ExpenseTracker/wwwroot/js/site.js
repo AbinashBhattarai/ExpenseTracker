@@ -1,4 +1,57 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿
+//transaction index transactiontype
+$(function () {
+    $('#transaction tbody tr td:nth-child(3)').each(function () {
+        var data = $(this).text();
+        console.log(data);
+        if (data == 'Income') {
+            $(this).find('span').addClass('income');
+        }
+        else {
+            $(this).find('span').addClass('expense');
+        }
+    });
+});
 
-// Write your JavaScript code.
+
+//delete functionality
+displayAlert = (urlParam, isCatagory) => {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this! " + isCatagory,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'DELETE',
+                url: urlParam,
+                success: function (result) {
+                    if (result.success == true) {
+                        toastr.success(result.message, 'Alert')
+                        window.setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    }
+                    else {
+                        toastr.error(result.message, 'Alert')
+                    }
+                }
+            });
+        }
+    });
+}
+
+
+$('#setUsername').on('change', function () {
+    var email = $('#Email').val()
+    if (this.checked) {
+        $('#UserName').val(email)
+    }
+    else {
+        $('#UserName').val('')
+    }
+});

@@ -1,0 +1,48 @@
+﻿@model RegisterViewModel
+
+
+<div class="d-flex justify-content-center align-items-center">
+    <form class="mt-5 bg-white p-3 rounded border shadow" style="width:40rem;" method="post" asp-controller="Account" asp-action="Register">
+        <a asp-controller="Account" asp-action="Login" class="text-decoration-none text-danger">
+            <i class="bi bi-arrow-left"></i>
+            Back to login
+        </a>
+        <p class="text-center fs-3 fw-bold">Registration</p>
+        <div class="text-danger validation" asp-validation-summary="ModelOnly"></div>
+        <div class="mb-3">
+            <label asp-for="FirstName" class="form-label fw-bold"></label>
+            <input type="text" class="form-control" asp-for="FirstName">
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="LastName" class="form-label fw-bold"></label>
+            <input type="text" class="form-control" asp-for="LastName">
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label fw-bold"></label>
+            <input type="email" class="form-control" asp-for="Email">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="UserName" class="form-label fw-bold"></label>
+            <input type="text" class="form-control usernameField" asp-for="UserName">
+            <label class="form-check-label mt-1 d-block">
+                <input type="checkbox" class="form-check-input" id="setUsername">
+                use email as username
+            </label>
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label fw-bold"></label>
+            <input type="password" class="form-control" asp-for="Password">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ConfirmPassword" class="form-label fw-bold"></label>
+            <input type="password" class="form-control" asp-for="ConfirmPassword">
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-danger w-100">Register</button>
+    </form>
+</div>

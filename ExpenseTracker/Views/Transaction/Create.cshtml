@@ -1,53 +1,49 @@
 ﻿@using ExpenseTracker.Enum
 @model CreateTransactionViewModel
 
-<div class="">
-    <h4 class="fw-bold">Add New Transaction</h4>
-    <p class="text-black-50 mb-3">
-        <span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-            </svg>
-        </span>
+<div class="pt-3">
+    <h4>Add New Transaction</h4>
+    <p class="text-black-50">
+        <i class="bi bi-house-fill"></i>
+        <i class="bi bi-chevron-right"></i>
         <a asp-controller="Transaction" asp-action="Index" class="text-black-50">Transaction</a>
-        <span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708" />
-            </svg>
-        </span>
+        <i class="bi bi-chevron-right"></i>
         <a asp-controller="Transaction" asp-action="Create" class="text-black-50">Add</a>
     </p>
-    <div class="d-flex flex-wrap justify-content-center align-items-center gap-5">
+
+    <div class="pt-2 d-flex flex-wrap justify-content-center align-items-center gap-5">
         <div class="p-3 rounded" style="width:30rem;background-color:lightblue">
-            <image src="/transaction.png" class="rounded mx-2" style="width:100%;height:auto;" />
+            <image src="/images/transaction.png" class="rounded mx-2" style="width:100%;height:auto;" />
         </div>
         <form method="post" asp-controller="Transaction" asp-action="Create" class="py-3 px-5 rounded shadow" style="background-color:aliceblue;width:30rem;">
             <div class="mb-3">
-                <label class="form-label">Transaction Date <span class="text-danger">*</span></label>
-                <input type="date" class="form-control" asp-for="Date" max="@Model.MaxDate">
+                <label asp-for="Date" class="form-label"></label>
+                <input type="date" class="form-control" asp-for="Date" max="@Model.Date.ToString("yyyy-MM-dd")">
+                <span asp-validation-for="Date" class="text-danger fw-normal"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">Type <span class="text-danger">*</span></label>
+                <label asp-for="Type" class="form-label"></label>
                 <select class="form-select" asp-for="Type" asp-items="@(Html.GetEnumSelectList<TransactionType>())">
+                    <option value="">Select Type</option>
                 </select>
+                <span asp-validation-for="Type" class="text-danger fw-normal"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">Category <span class="text-danger">*</span></label>
-                <select class="form-select text-capitalize" asp-for="CategoryId" asp-items="@(new SelectList(Model.Categories,"Id", "Name"))">
+                <label asp-for=CategoryId class="form-label"></label>
+                <select class="form-select" asp-for="CategoryId" asp-items="@Model.Categories">
                     <option selected>Select Category</option>
                 </select>
-                <p class="text-end">Didn't find category <a asp-controller="Category" asp-action="Create">Click here to add</a></p>
+                <span asp-validation-for="CategoryId" class="text-danger fw-normal"></span>
             </div>
             <div class="mb-3">
                 <label asp-for="Note" class="form-label"></label>
-                <input type="text" class="form-control text-capitalize" asp-for="Note">
+                <textarea class="form-control" asp-for="Note"></textarea>
+                <span asp-validation-for="Note" class="text-danger fw-normal"></span>
             </div>
             <div class="mb-3">
-                <label class="form-label">Amount <span class="text-danger">*</span></label>
-                <input required type="number" class="form-control" asp-for="Amount" value="">
+                <label asp-for=Amount class="form-label"></label>
+                <input type="number" class="form-control" asp-for="Amount">
+                <span asp-validation-for="Amount" class="text-danger fw-normal"></span>
             </div>
             <div class="pt-3">
                 <button type="submit" class="btn btn-success w-100">Submit</button>

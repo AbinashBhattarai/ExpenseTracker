@@ -1,6 +1,7 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Models;
 using ExpenseTracker.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +14,8 @@ namespace ExpenseTracker.Controllers
         {
             _context = context;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? result)
+        
         {
             var categories = await _context.Category
                                     .AsNoTracking()
@@ -46,6 +48,7 @@ namespace ExpenseTracker.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
+        
         {
             if(id <= 0)
             {
@@ -92,13 +95,14 @@ namespace ExpenseTracker.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var Category = await _context.Category.FindAsync(1000);
-            if (Category == null)
+            var category = await _context.Category.FindAsync(id);
+            if (category == null)
             {
                 return Json(new { success = false, message = "Category not found" });
             }
-            _context.Category.Remove(Category);
+            _context.Category.Remove(category);
             await _context.SaveChangesAsync();
+
             return Json(new { success = true, message = "Category deleted successfully" });
         }
     }
