@@ -24,6 +24,7 @@
             <div class="mb-3">
                 <label asp-for="Type" class="form-label"></label>
                 <select class="form-select" asp-for="Type" asp-items="@(Html.GetEnumSelectList<TransactionType>())">
+                    <option value="">Select Type</option>
                 </select>
                 <span asp-validation-for="Type" class="text-danger fw-normal"></span>
             </div>

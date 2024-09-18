@@ -1,4 +1,6 @@
-﻿
+﻿@model HomeViewModel
+
+
 <div class="pt-4">
 
     <h5 class="text-danger mb-4">Welcome Back, John</h5>
@@ -27,7 +29,7 @@
                 </span>
                 <div class="w-100 d-flex flex-column align-items-center justify-content-center p-2">
                     <span class="fs-5">Total Income</span>
-                    <span class="fw-bold fs-5 text-primary">2245</span>
+                    <span class="fw-bold fs-5 text-primary">@Model.TotalIncome</span>
                 </div>
             </div>
             <div class="flex-grow-1 back-color rounded d-flex border shadow">
@@ -36,7 +38,7 @@
                 </span>
                 <div class="w-100 d-flex flex-column align-items-center justify-content-center p-2">
                     <span class="fs-5">Total Expense</span>
-                    <span class="fw-bold fs-5 text-danger">2245</span>
+                    <span class="fw-bold fs-5 text-danger">@Model.TotalExpense</span>
                 </div>
             </div>
             <div class="flex-grow-1 back-color rounded d-flex border shadow">
@@ -45,7 +47,7 @@
                 </span>
                 <div class="w-100 d-flex flex-column align-items-center justify-content-center p-2">
                     <span class="fs-5">Total Balance</span>
-                    <span class="fw-bold fs-5 text-success">2245</span>
+                    <span class="fw-bold fs-5 text-success">@Model.Balance</span>
                 </div>
             </div>
         </div>

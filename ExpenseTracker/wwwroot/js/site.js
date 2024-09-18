@@ -45,13 +45,3 @@ displayAlert = (urlParam, isCatagory) => {
     });
 }
 
-
-$('#setUsername').on('change', function () {
-    var email = $('#Email').val()
-    if (this.checked) {
-        $('#UserName').val(email)
-    }
-    else {
-        $('#UserName').val('')
-    }
-});

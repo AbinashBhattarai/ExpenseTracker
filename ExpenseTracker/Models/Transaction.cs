@@ -20,5 +20,8 @@ namespace ExpenseTracker.Models
 
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
+
+        public string AppUserId { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }

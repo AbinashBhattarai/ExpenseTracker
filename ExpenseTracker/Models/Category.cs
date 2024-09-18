@@ -8,5 +8,9 @@ namespace ExpenseTracker.Models
 
         [Column(TypeName ="nvarchar(50)")]
         public string Name { get; set; }
+
+
+        public string AppUserId { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }

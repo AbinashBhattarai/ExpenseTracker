@@ -1,8 +1,9 @@
-﻿@model IEnumerable<Transaction>
+﻿@model TransactionViewModel
+
 
 <div class="pt-3 overflow-auto container">
     <div class="d-sm-flex justify-content-between align-items-center mb-3">
-        <div>
+        <div style="flex:1">
             <h4>Transaction</h4>
             <p class="text-black-50">
                 <i class="bi bi-house-fill"></i>
@@ -15,25 +16,87 @@
             <a asp-action="Create" asp-controller="Transaction" class="text-decoration-none">Add Transaction</a>
         </div>
     </div>
-    @if (Model.Count() > 0)
+
+    <div class="row">
+        <form method="post" asp-controller="Transaction" asp-action="Index"  class="border rounded-3 px-3 py-2 mb-5 col-md-8 mx-auto" style="background-color:#f5f5f5;">
+            <p class="fw-bold fs-5 text-black-50 text-center">Filter Transaction</p>
+
+            <div class="mb-4">
+                <input type="text" class="form-control" placeholder="Search by category" asp-for="SearchString">
+            </div>
+
+            <div class="d-flex flex-wrap gap-3 w-100">
+                <div class="mb-3 flex-grow-1">
+                    <label class="form-label mb-0 ps-2">Start Date</label>
+                    <input asp-for="StartDate" type="date" value="@Model.StartDate?.ToString("yyyy-MM-dd")" class="form-control">
+                </div>
+                <div class="mb-3 flex-grow-1">
+                    <label class="form-label mb-0 ps-2">End Date</label>
+                    <input asp-for="EndDate" type="date" value="@Model.EndDate?.ToString("yyyy-MM-dd")" class="form-control">
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-success" type="submit">Search</button>
+                <a class="btn btn-danger" asp-action="Index" asp-controller="Transaction">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    @if (Model.Transactions.Count() > 0)
     {
         <div class="rounded-3 overflow-hidden rounded" style="min-width:45rem;background-color:aliceblue;">
             <table id="transaction" class="table table-borderless text-center border-bottom mb-0">
                 <thead class="table-primary">
                     <tr>
-                        <th>Category</th>
-                        <th>Date</th>
+                        <th>
+                            Date
+                            <a asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.DateSortParam" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@Model.CurrentPage">
+                                @if (Model.DateSortParam == "date_asc")
+                                {
+                                    <i class="bi bi-sort-alpha-down-alt"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-sort-alpha-down"></i>
+                                }
+                            </a>
+                        </th>
+                        <th>
+                            Category
+                            <a asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.CategorySortParam" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@Model.CurrentPage">
+                                @if (Model.CategorySortParam == "category_desc")
+                                {
+                                    <i class="bi bi-sort-alpha-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-sort-alpha-down-alt"></i>
+                                }
+                            </a>
+                        </th>
                         <th>Type</th>
-                        <th>Amount</th>
+                        <th>
+                            Amount
+                            <a asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.AmountSortParam" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@Model.CurrentPage">
+                                @if (Model.AmountSortParam == "amount_desc")
+                                {
+                                    <i class="bi bi-sort-alpha-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-sort-alpha-down-alt"></i>
+                                }
+                            </a>
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var transaction in Model)
+                    @foreach (var transaction in Model.Transactions)
                     {
                         <tr>
+                            <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
                             <td>@transaction.Category!.Name</td>
-                            <td>@transaction.Date.ToShortDateString()</td>
                             <td><span class="rounded px-1 pb-1">@transaction.Type</span></td>
                             <td>@transaction.Amount</td>
                             <td>
@@ -56,24 +119,48 @@
             </table>
             <div class="d-flex flex-wrap justify-content-start gap-3 justify-content-md-between ps-3 pe-5 pt-2 align-items-baseline">
                 <ul class="pagination mb-0">
-                    <li class="page-item">
-                        <a class="page-link py-1" href="#" style="background-color:aliceblue;">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item active"><a class="page-link active py-1" href="#">1</a></li>
-                    <li class="page-item">
-                        <a class="page-link py-1" href="#" style="background-color:aliceblue;">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
+                    @if(Model.CurrentPage > 1)
+                    {                        
+                        <li class="page-item">
+                            <a class="page-link py-1" style="background-color:aliceblue;" asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@(Model.CurrentPage-1)">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    }
+                    @for(int i=1; i<=Model.TotalPages; i++)
+                    {
+                        if(i == Model.CurrentPage)
+                        {                            
+                            <li class="page-item active">
+                                <a class="page-link py-1" asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@i">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link py-1" asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@i">
+                                    @i
+                                </a>
+                            </li>
+                        }
+                    }
+                    @if(Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link py-1" style="background-color:aliceblue;" asp-action="Index" asp-controller="Transaction" asp-route-searchString="@Model.SearchString" asp-route-sortOrder="@Model.SortOrder" asp-route-startDate="@Model.StartDate" asp-route-endDate="@Model.EndDate" asp-route-currentPage="@(Model.CurrentPage+1)">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    }
                 </ul>
-                <p class="text-black-50">Page 1 of 1</p>
+                <p class="text-black-50">Page @Model.CurrentPage of @Model.TotalPages</p>
             </div>
         </div>
     }
     else
     {
-        <p class="text-center text-danger fw-bold fs-5">You have not added any transactions yet!!!</p>
+        <p class="text-center text-danger fw-bold fs-5">@Model.ResultMsg</p>
     }
 </div>

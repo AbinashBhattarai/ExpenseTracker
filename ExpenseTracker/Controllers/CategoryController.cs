@@ -2,6 +2,7 @@
 using ExpenseTracker.Models;
 using ExpenseTracker.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,14 +11,20 @@ namespace ExpenseTracker.Controllers
     public class CategoryController : Controller
     {
         private readonly AppDbContext _context;
-        public CategoryController(AppDbContext context)
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        public CategoryController(AppDbContext context, SignInManager<AppUser> signInManager, UserManager<AppUser> userManager)
         {
             _context = context;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
         public async Task<IActionResult> Index(int? result)
-        
         {
+            var userId = GetCurrentUserId();
             var categories = await _context.Category
+                                    .Where(c => c.AppUserId == userId)
+                                    .OrderBy(c => c.Name)
                                     .AsNoTracking()
                                     .ToListAsync();
             return View(categories);
@@ -36,7 +43,8 @@ namespace ExpenseTracker.Controllers
             {
                 var category = new Category
                 {
-                    Name = createCategoryVM.Name
+                    Name = createCategoryVM.Name,
+                    AppUserId = GetCurrentUserId()
                 };
                 await _context.Category.AddAsync(category);
                 await _context.SaveChangesAsync();
@@ -54,9 +62,11 @@ namespace ExpenseTracker.Controllers
             {
                 return NotFound();
             }
+
+            var userId = GetCurrentUserId();
             var category = await _context.Category
                                     .AsNoTracking()
-                                    .FirstOrDefaultAsync(c => c.Id == id);
+                                    .FirstOrDefaultAsync(c => c.Id == id && c.AppUserId == userId);
             if(category == null)
             {
                 return NotFound();
@@ -80,6 +90,12 @@ namespace ExpenseTracker.Controllers
 
             var Category = await _context.Category.FindAsync(editCategoryVM.Id);
 
+            var userId = GetCurrentUserId();
+            if (userId != Category!.AppUserId)
+            {
+                return NotFound();
+            }
+
             if (Category == null)
             {
                 return NotFound();
@@ -96,6 +112,13 @@ namespace ExpenseTracker.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var category = await _context.Category.FindAsync(id);
+
+            var userId = GetCurrentUserId();
+            if (userId != category!.AppUserId)
+            {
+                return Json(new { success = false, message = "Something went wrong" });
+            }
+
             if (category == null)
             {
                 return Json(new { success = false, message = "Category not found" });
@@ -104,6 +127,13 @@ namespace ExpenseTracker.Controllers
             await _context.SaveChangesAsync();
 
             return Json(new { success = true, message = "Category deleted successfully" });
+        }
+
+
+        public string GetCurrentUserId()
+        {
+            var userId = _userManager.GetUserId(User);
+            return userId!;
         }
     }
 }

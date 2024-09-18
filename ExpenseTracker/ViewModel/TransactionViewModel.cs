@@ -8,6 +8,24 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace ExpenseTracker.ViewModel
 {
+    public class TransactionViewModel
+    {
+        public IEnumerable<Transaction> Transactions { get; set; } = [];
+        public string? SearchString { get; set; }
+        public string? CategorySortParam { get; set; }
+        public string? DateSortParam { get; set; }
+        public string? AmountSortParam { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string? ResultMsg { get; set; }
+
+        public int PageSize { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; } 
+        public string? SortOrder { get; set; }
+    }
+
+
     public class CreateTransactionViewModel
     {
         [DisplayName("Transaction Date")]
