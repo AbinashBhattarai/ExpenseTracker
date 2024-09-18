@@ -41,7 +41,7 @@ namespace ExpenseTracker.Controllers
                 transactionsQ = transactionsQ.Where(t => t.Date >= startDate && t.Date <= endDate);
             }
 
-            int pageSize = 2;
+            int pageSize = 5;
             int totalPages = (int)Math.Ceiling((double)(transactionsQ.Count() / pageSize));
 
             transactionsQ = transactionsQ
