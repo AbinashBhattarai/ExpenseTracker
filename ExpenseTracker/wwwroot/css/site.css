@@ -32,3 +32,7 @@ body {
 .expense{
     background-color: indianred;
 }
+.chart-box {
+    width:35rem;
+    height: 22rem;
+}

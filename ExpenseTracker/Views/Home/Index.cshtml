@@ -3,26 +3,10 @@
 
 <div class="pt-4">
 
-    <h5 class="text-danger mb-4">Welcome Back, John</h5>
+    <h5 class="text-danger mb-4">Welcome Back, @Model.FullName</h5>
 
-    <div class="mx-auto" style="max-width:50rem;">
-        @* <div class="border rounded-3 px-3 py-2 mb-5" style="background-color:#f5f5f5;">
-            <p class="fw-bold fs-5 text-black-50 text-center">Filter Transaction</p>
-            <div class="d-flex flex-wrap gap-3 w-100">
-                <div class="mb-3 flex-grow-1">
-                    <label class="form-label mb-0 ps-2">Start Date</label>
-                    <input type="date" class="form-control">
-                </div>
-                <div class="mb-3 flex-grow-1">
-                    <label class="form-label mb-0 ps-2">End Date</label>
-                    <input type="date" class="form-control">
-                </div>
-            </div>
-            <div class="text-center">
-                <button class="btn btn-success btn-sm">Search</button>
-            </div>
-        </div> *@
-        <div class="w-100 d-flex flex-wrap gap-4">
+    <div>
+        <div class="w-100 d-flex flex-wrap gap-4 mb-5">
             <div class="flex-grow-1 back-color rounded d-flex border shadow">
                 <span class="bg-dark rounded-start p-2">
                     <i class="bi bi-currency-dollar text-primary" style="font-size:2.5rem;"></i>
@@ -47,9 +31,124 @@
                 </span>
                 <div class="w-100 d-flex flex-column align-items-center justify-content-center p-2">
                     <span class="fs-5">Total Balance</span>
-                    <span class="fw-bold fs-5 text-success">@Model.Balance</span>
+                    <span class="fw-bold fs-5 text-success">@Model.TotalBalance</span>
                 </div>
             </div>
         </div>
+
+        <div class="d-flex flex-wrap gap-5">
+            <div class="flex-grow-1 overflow-auto">
+                <p class="fw-bold p-2 text-center" style="background-color:aliceblue;">Transaction by Category</p>
+                <div class="d-flex justify-content-center p-2 rounded chart-box">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+            <div class="flex-grow-1 overflow-auto">
+                <p class="fw-bold p-2 text-center" style="background-color:aliceblue;">Income vs Expense</p>
+                <div class="d-flex justify-content-center p-2 rounded chart-box">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <p class="mb-0 mt-5 text-primary fs-5 rounded-top">Recent transactions</p>
+        <div class="overflow-auto">
+            @if (Model.Transactions.Count() > 0)
+            {
+                <div class="rounded-3 rounded" style="min-width:45rem;background-color:aliceblue;">
+                    <table id="transaction" class="table table-borderless text-center">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Category
+                                </th>
+                                <th>Type</th>
+                                <th>
+                                    Amount
+                                </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var transaction in Model.Transactions)
+                            {
+                                <tr>
+                                    <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
+                                    <td>@transaction.Category!.Name</td>
+                                    <td><span class="rounded px-1 pb-1">@transaction.Type</span></td>
+                                    <td>@transaction.Amount</td>
+                                    <td>
+                                        <a asp-controller="Transaction" asp-action="View" asp-route-id="@transaction.Id" class="btn btn-secondary btn-sm" style="width:5rem;">
+                                            <i class="bi bi-eye"></i>
+                                            View
+                                        </a>
+                                        <a asp-controller="Transaction" asp-action="Edit" asp-route-id="@transaction.Id" class="btn btn-success btn-sm" style="width:5rem;">
+                                            <i class="bi bi-pencil-square"></i>
+                                            Edit
+                                        </a>
+                                        <a class="btn btn-danger btn-sm" style="width:5.2rem;" onclick="displayAlert('/Transaction/Delete/@transaction.Id', '')">
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-center text-danger fw-bold fs-5">Transactions not found.</p>
+            }
+        </div>
     </div>
 </div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js" ></script>
+<script>
+    //doughnut chart
+    const ctx_pie = document.getElementById('pieChart');
+    new Chart(ctx_pie, {
+        type: 'doughnut',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.PieLabels)),
+            datasets: [{
+                label: 'Amount',
+                data: @Html.Raw(Json.Serialize(Model.PieAmounts)),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    //line chart
+    const ctx_line = document.getElementById('lineChart');
+    new Chart(ctx_line, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.LineLabels)),
+            datasets: [{
+                label: 'Income',
+                data: @Html.Raw(Json.Serialize(Model.IncomeAmount)),
+                yAxisID: 'y',
+            },
+            {
+                label: 'Expense',
+                data: @Html.Raw(Json.Serialize(Model.ExpenseAmount)),
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>

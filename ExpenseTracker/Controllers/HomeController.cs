@@ -24,24 +24,38 @@ namespace ExpenseTracker.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = GetCurrentUserId();
-            var income = await _context.Transaction
-                                    .Where(t => t.AppUserId == userId && t.Type == TransactionType.Income)
-                                    .ToListAsync();
+            var transactionsQ = _context.Transaction
+                                            .Where(t => t.AppUserId == GetCurrentUserId())
+                                            .Include(t => t.Category)
+                                            .AsQueryable();
 
-            var expense = await _context.Transaction
-                                    .Where(t => t.AppUserId == userId && t.Type == TransactionType.Expense)
-                                    .ToListAsync();
-
-            var totalIncome = income.Select(i => i.Amount).Sum();
-            var totalExpense = expense.Select(i => i.Amount).Sum();
-            var balance = totalIncome - totalExpense;
+            var user = await _userManager.GetUserAsync(User);
 
             var homeVM = new HomeViewModel()
             {
-                TotalIncome = totalIncome,
-                TotalExpense = totalExpense,
-                Balance = balance
+                IncomeAmount = transactionsQ
+                                .Where(tq => tq.Type == TransactionType.Income)
+                                .Select(i => i.Amount).ToList(),
+                ExpenseAmount = transactionsQ
+                                .Where(tq => tq.Type == TransactionType.Expense)
+                                .Select(i => i.Amount).ToList(),
+                PieLabels = transactionsQ
+                                .Select(tq => tq.Category!.Name)
+                                .ToList(),
+                PieAmounts = transactionsQ
+                                .Select(tq => tq.Amount)
+                                .ToList(),
+                LineLabels = transactionsQ
+                                .OrderByDescending(tq => tq.Date)
+                                .Take(5)
+                                .OrderBy(tq => tq.Date)
+                                .Select(tq => tq.Date.ToShortDateString())
+                                .ToList(),
+                Transactions = transactionsQ
+                                    .OrderByDescending(tq => tq.Date)
+                                    .Take(5)
+                                    .ToList(),
+               FullName = user!.FullName
             };
 
             return View(homeVM);

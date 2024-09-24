@@ -1,9 +1,9 @@
 ﻿
-//transaction index transactiontype
+
 $(function () {
+    //transaction index change color of transactiontype
     $('#transaction tbody tr td:nth-child(3)').each(function () {
         var data = $(this).text();
-        console.log(data);
         if (data == 'Income') {
             $(this).find('span').addClass('income');
         }
