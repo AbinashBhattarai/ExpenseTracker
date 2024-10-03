@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Category>
 
-<div class="pt-3 overflow-auto container">
+<div class="pt-3 container">
     <div class="d-sm-flex justify-content-between align-items-center mb-3">
         <div>
             <h4>Category</h4>
@@ -16,41 +16,43 @@
         </div>
     </div>
 
-    @if (Model.Count() > 0)
-    {
-        <div class="rounded-3 overflow-hidden rounded" style="min-width:22rem;background-color:aliceblue;">
-            <table id="transaction" class="table table-borderless text-center border-bottom mb-0">
-                <thead class="table-primary">
-                    <tr>
-                        <th>Category Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var category in Model)
-                    {
+    <div class="overflow-auto">
+        @if (Model.Count() > 0)
+        {
+            <div class="rounded-3 overflow-hidden rounded" style="min-width:22rem;background-color:aliceblue;">
+                <table id="transaction" class="table table-borderless text-center border-bottom mb-0">
+                    <thead class="table-primary">
                         <tr>
-                            <td>@category.Name</td>
-                            <td>
-                                <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-success btn-sm" style="width:5rem;">
-                                    <i class="bi bi-pencil-square"></i>
-                                    Edit
-                                </a>
-                                <a class="btn btn-danger btn-sm" style="width:5.2rem;" onclick="displayAlert('/Category/Delete/@category.Id', 'Transactions associated to this category will also be deleted. Please remove all the transactions associated to this category!')">
-                                    <i class="bi bi-trash" ></i>
-                                    Delete
-                                </a>
-                            </td>
+                            <th>Category Name</th>
+                            <th>Actions</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    }
-    else
-    {
-        <p class="text-center text-danger fw-bold fs-5">You have not added any Category yet!!!</p>
-    }
+                    </thead>
+                    <tbody>
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+                                <td>@category.Name</td>
+                                <td>
+                                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-success btn-sm" style="width:5rem;">
+                                        <i class="bi bi-pencil-square"></i>
+                                        Edit
+                                    </a>
+                                    <a class="btn btn-danger btn-sm" style="width:5.2rem;" onclick="displayAlert('/Category/Delete/@category.Id', 'Please remove this category from your transactions.')">
+                                        <i class="bi bi-trash" ></i>
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-danger fw-bold fs-5">You have not added any Category yet!!!</p>
+        }
+    </div>
 </div>
 
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExpenseTracker.ViewModel
 {
@@ -14,5 +15,6 @@ namespace ExpenseTracker.ViewModel
 
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; } = [];
     }
 }

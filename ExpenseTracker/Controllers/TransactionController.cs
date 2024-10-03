@@ -42,7 +42,7 @@ namespace ExpenseTracker.Controllers
             }
 
             int pageSize = 5;
-            int totalPages = (int)Math.Ceiling((double)(transactionsQ.Count() / pageSize));
+            int totalPages = (int)Math.Ceiling((decimal)transactionsQ.Count() / pageSize);
 
             transactionsQ = transactionsQ
                             .Skip((currentPage - 1) * pageSize)

@@ -51,10 +51,11 @@
             </div>
         </div>
 
-        <p class="mb-0 mt-5 text-primary fs-5 rounded-top">Recent transactions</p>
-        <div class="overflow-auto">
-            @if (Model.Transactions.Count() > 0)
+        @if (Model.Transactions.Count() > 0)
             {
+            <p class="mb-0 mt-5 text-primary fs-5 rounded-top">Recent transactions</p>
+            <div class="overflow-auto">
+            
                 <div class="rounded-3 rounded" style="min-width:45rem;background-color:aliceblue;">
                     <table id="transaction" class="table table-borderless text-center">
                         <thead class="table-primary">
@@ -99,12 +100,12 @@
                         </tbody>
                     </table>
                 </div>
-            }
-            else
-            {
-                <p class="text-center text-danger fw-bold fs-5">Transactions not found.</p>
-            }
-        </div>
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-danger fw-bold fs-5 mt-5">You donot have any transactions yet.</p>
+        }
     </div>
 </div>
 
@@ -113,14 +114,23 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js" ></script>
 <script>
     //doughnut chart
+    var pieLabels = @Html.Raw(Json.Serialize(Model.Categories));
+    var pieData = @Html.Raw(Json.Serialize(Model.CategoryAmounts));
+    if (pieLabels.length < 1) {
+        pieLabels = ["Red", "green", "Blue", "Yellow"];
+    }
+    if(pieData.length < 1){
+        pieData = ["100", "60", "200", "150"];
+    }
+
     const ctx_pie = document.getElementById('pieChart');
     new Chart(ctx_pie, {
         type: 'doughnut',
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.PieLabels)),
+            labels: pieLabels,
             datasets: [{
                 label: 'Amount',
-                data: @Html.Raw(Json.Serialize(Model.PieAmounts)),
+                data: pieData,
                 borderWidth: 1
             }]
         },
@@ -129,21 +139,35 @@
             maintainAspectRatio: false
         }
     });
+    
 
     //line chart
+    var chartLabels = @Html.Raw(Json.Serialize(Model.TransactionDates));
+    var chartIncome = @Html.Raw(Json.Serialize(Model.IncomeAmounts));
+    var chartExpense = @Html.Raw(Json.Serialize(Model.ExpenseAmounts));
+    if (chartLabels.length < 1) {
+        chartLabels = ["9/7/2024", "9/9/2024", "9/13/2024", "9/17/2024"];
+    }
+    if (chartIncome.length < 1) {
+        chartIncome = ["200", "80", "100"];
+    }
+    if (chartExpense.length < 1) {
+        chartExpense = ["70", "100", "60", "40"];
+    }
+
     const ctx_line = document.getElementById('lineChart');
     new Chart(ctx_line, {
         type: 'line',
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.LineLabels)),
+            labels: chartLabels,
             datasets: [{
                 label: 'Income',
-                data: @Html.Raw(Json.Serialize(Model.IncomeAmount)),
+                data: chartIncome,
                 yAxisID: 'y',
             },
             {
                 label: 'Expense',
-                data: @Html.Raw(Json.Serialize(Model.ExpenseAmount)),
+                data: chartExpense,
             }]
         },
         options: {

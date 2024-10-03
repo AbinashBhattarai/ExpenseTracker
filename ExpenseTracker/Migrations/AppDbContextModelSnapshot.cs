@@ -309,7 +309,7 @@ namespace ExpenseTracker.Migrations
                     b.HasOne("ExpenseTracker.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");

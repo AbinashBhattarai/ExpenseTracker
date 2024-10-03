@@ -19,12 +19,6 @@ namespace ExpenseTracker.ViewModel
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
 
-        [Display(Name = "Username")]
-        [Required(ErrorMessage = "Username is required")]
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Username must be between 5 to 50 characters")]
-        [Remote(action: "IsUserNameAvailableForRegistration", controller: "Account")]
-        public string UserName { get; set; }
-
         [Required(ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
